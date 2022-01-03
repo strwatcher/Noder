@@ -1,3 +1,0 @@
-package com.strwatcher.noder
-
-class DraggableTitleButDarkController: Controller

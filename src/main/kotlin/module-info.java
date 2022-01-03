@@ -1,4 +1,4 @@
-module com.strwatcher.noder.noder {
+module com.strwatcher.noder {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -13,4 +13,6 @@ module com.strwatcher.noder.noder {
 
     opens com.strwatcher.noder to javafx.fxml;
     exports com.strwatcher.noder;
+    opens com.strwatcher.noder.base to javafx.fxml;
+    exports com.strwatcher.noder.base;
 }

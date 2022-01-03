@@ -1,16 +1,17 @@
 package com.strwatcher.noder
 
 import javafx.fxml.FXML
-import javafx.fxml.FXMLLoader
 import javafx.scene.control.Button
 import javafx.scene.input.DataFormat
+import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 
 class MainViewController {
     private val stateNode = DataFormat("stateNode")
+    private val stateLink = DataFormat("stateLink")
 
     @FXML
-    private lateinit var pane: Pane
+    private lateinit var pane: AnchorPane
 
     @FXML
     private lateinit var bAddNewNode: Button
@@ -24,9 +25,7 @@ class MainViewController {
     }
 
     private fun createNode() {
-        val newNode = DarkDraggableTitle(stateNode,
-            FXMLLoader(javaClass.getResource("DraggableTitleButDark.fxml")),
-            DraggableTitleButDarkController())
+        val newNode = DarkDraggableTitle(stateNode, stateLink, "DarkDraggableTitle.fxml")
         pane.children.add(newNode)
     }
 }

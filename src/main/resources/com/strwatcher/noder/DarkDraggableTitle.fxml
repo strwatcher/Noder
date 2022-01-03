@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" >
+   <children>
+      <Label alignment="CENTER" layoutX="66.0" layoutY="74.0" text="Label" textFill="WHITE">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <AnchorPane fx:id="draggedArea" prefHeight="37.0" prefWidth="215.0" style="-fx-background-color: gray;" />
+      <AnchorPane fx:id="leftLinkHandle" layoutY="74.0" prefHeight="53.0" prefWidth="58.0" />
+      <AnchorPane fx:id="rightLinkHandle" layoutX="157.0" layoutY="74.0" prefHeight="53.0" prefWidth="58.0" />
+   </children>
+</AnchorPane>

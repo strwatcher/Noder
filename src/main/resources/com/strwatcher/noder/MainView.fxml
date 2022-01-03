@@ -5,8 +5,9 @@
 <?import javafx.scene.text.Font?>
 
 
-<Pane fx:controller="com.strwatcher.noder.MainViewController"
-        fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="584.0" prefWidth="978.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane fx:controller="com.strwatcher.noder.MainViewController"
+            fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="584.0" prefWidth="978.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="bAddNewNode" layoutX="413.0" layoutY="437.0" mnemonicParsing="false" text="Add Node">
          <font>
@@ -14,4 +15,4 @@
          </font>
       </Button>
    </children>
-</Pane>
+</AnchorPane>
