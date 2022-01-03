@@ -15,4 +15,6 @@ module com.strwatcher.noder {
     exports com.strwatcher.noder;
     opens com.strwatcher.noder.base to javafx.fxml;
     exports com.strwatcher.noder.base;
+    opens com.strwatcher.noder.nodes to javafx.fxml;
+    exports com.strwatcher.noder.nodes;
 }
