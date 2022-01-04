@@ -1,6 +1,7 @@
 package com.strwatcher.noder.base
 
 import javafx.event.EventHandler
+import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.geometry.Point2D
 import javafx.scene.input.*
@@ -73,19 +74,19 @@ open class DraggableNode(
 
     val linkDragDetectedHandler = EventHandler<MouseEvent> {
             event ->
+        if (!link.isConnected) {
+            parent.onDragOver = contextLinkDragOverHandler
+            parent.onDragDropped = contextLinkDragDroppedHandler
 
-        parent.onDragOver = contextLinkDragOverHandler
-        parent.onDragDropped = contextLinkDragDroppedHandler
+            link.isVisible = true
+            link.bindStart(event.source as LinkOutput)
 
-        superParent!!.children.add(0, link)
-        link.isVisible = true
-        val point = Point2D(event.sceneX, event.sceneY)
-        link.setStart(point)
-
-        val content = ClipboardContent()
-        content[linkState] = "link"
-        startDragAndDrop(*TransferMode.ANY).setContent(content)
-        event.consume()
+            superParent!!.children.add(0, link)
+            val content = ClipboardContent()
+            content[linkState] = "link"
+            startDragAndDrop(*TransferMode.ANY).setContent(content)
+            event.consume()
+        }
 
     }
 
@@ -95,14 +96,12 @@ open class DraggableNode(
         parent.onDragOver = null
         parent.onDragDropped = null
 
-        link.isVisible = false
-        superParent!!.children.removeAt(0)
+        val connectedLink = (event.gestureSource as DraggableNode).link
+        connectedLink.bindEnd(event.source as LinkInput)
+        connectedLink.isConnected = true
 
-        val newLink = NodeLink()
-        newLink.bindEnd(event.gestureSource as DraggableNode, event.source as LinkInput)
-        superParent!!.children.add(0, newLink)
-//        (event. = Paint.valueOf("ffffff")
         val content = ClipboardContent()
+
         content[linkState] = "link"
         startDragAndDrop(*TransferMode.ANY).setContent(content)
         event.consume()
@@ -110,7 +109,7 @@ open class DraggableNode(
 
 
     private var offset = Point2D(0.0, 0.0)
-    private var superParent: AnchorPane? = null
+    var superParent: AnchorPane? = null
     private var link = NodeLink()
 
     private fun moveTo(point: Point2D) {
@@ -126,9 +125,16 @@ open class DraggableNode(
     init {
         loader.setController(this)
         children.add(loader.load())
-        parentProperty().addListener {
-                _, _, _ ->
+        parentProperty().addListener { _, _, _ ->
             superParent = parent as AnchorPane
         }
+
+        link.setOnMouseClicked {
+            superParent!!.children.remove(link)
+            link.isConnected = false
+            link.unbindEnd()
+        }
+
     }
+
 }
