@@ -1,22 +1,15 @@
 package com.strwatcher.noder.base
 
 import javafx.event.EventHandler
-import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.geometry.Point2D
 import javafx.scene.input.*
 import javafx.scene.layout.AnchorPane
-import javafx.scene.layout.Background
-import javafx.scene.layout.BackgroundFill
-import javafx.scene.paint.Color
-import javafx.scene.paint.Paint
-import javafx.scene.shape.Circle
-import javafx.scene.shape.Shape
 
 
-open class DraggableNode(
+open class DraggableNode<T>(
     private val nodeState: DataFormat,
-    protected val linkState: DataFormat,
+    private val linkState: DataFormat,
     loader: FXMLLoader
 ): AnchorPane() {
 
@@ -79,7 +72,7 @@ open class DraggableNode(
             parent.onDragDropped = contextLinkDragDroppedHandler
 
             link.isVisible = true
-            link.bindStart(event.source as LinkOutput)
+            link.bindStart(event.source as LinkOutput<*>)
 
             superParent!!.children.add(0, link)
             val content = ClipboardContent()
@@ -96,9 +89,17 @@ open class DraggableNode(
         parent.onDragOver = null
         parent.onDragDropped = null
 
-        val connectedLink = (event.gestureSource as DraggableNode).link
-        connectedLink.bindEnd(event.source as LinkInput)
+        val connectedLink = (event.gestureSource as DraggableNode<T>).link
+
+        connectedLink.bindEnd(event.source as LinkInput<T>)
         connectedLink.isConnected = true
+        connectedLink.destination = event.source as LinkInput<T>
+
+        val value = connectedLink.valueProperty.value
+        connectedLink.valueProperty.set(null)
+        connectedLink.valueProperty.set(value)
+
+        connectedLinks.add(connectedLink)
 
         val content = ClipboardContent()
 
@@ -109,8 +110,10 @@ open class DraggableNode(
 
 
     private var offset = Point2D(0.0, 0.0)
-    var superParent: AnchorPane? = null
-    private var link = NodeLink()
+    protected var superParent: AnchorPane? = null
+    var link = NodeLink(this)
+    var value: T? = null
+    protected val connectedLinks = mutableListOf<NodeLink<T>>()
 
     private fun moveTo(point: Point2D) {
         val local = parent.sceneToLocal(point)
@@ -126,7 +129,9 @@ open class DraggableNode(
         loader.setController(this)
         children.add(loader.load())
         parentProperty().addListener { _, _, _ ->
-            superParent = parent as AnchorPane
+            parent?.let {
+                superParent = parent as AnchorPane
+            }
         }
 
         link.setOnMouseClicked {

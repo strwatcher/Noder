@@ -1,10 +1,12 @@
 package com.strwatcher.noder.base
 
+import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.layout.AnchorPane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 
-class LinkInput: AnchorPane() {
+class LinkInput<T>: AnchorPane() {
+    val valueProperty = SimpleObjectProperty<T>()
 
     init {
         setPrefSize(20.0, 20.0)

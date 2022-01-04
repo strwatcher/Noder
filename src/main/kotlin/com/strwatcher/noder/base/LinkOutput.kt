@@ -4,8 +4,7 @@ import javafx.scene.layout.AnchorPane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 
-class LinkOutput: AnchorPane() {
-
+class LinkOutput<T>: AnchorPane() {
     init {
         setPrefSize(20.0, 20.0)
         val circle = Circle(10.0, Color.RED)

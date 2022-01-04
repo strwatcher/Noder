@@ -3,7 +3,9 @@ package com.strwatcher.noder.base
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.When
 import javafx.beans.property.DoubleProperty
+import javafx.beans.property.Property
 import javafx.beans.property.SimpleDoubleProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.event.EventHandler
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
@@ -11,7 +13,7 @@ import javafx.geometry.Point2D
 import javafx.scene.layout.AnchorPane
 import javafx.scene.shape.CubicCurve
 
-class NodeLink : AnchorPane() {
+class NodeLink<T>(private val source: DraggableNode<T>) : AnchorPane() {
     @FXML
     lateinit var link: CubicCurve
 
@@ -21,13 +23,23 @@ class NodeLink : AnchorPane() {
     private val offsetDirX2 = SimpleDoubleProperty()
     private val offsetDirY1 = SimpleDoubleProperty()
     private val offsetDirY2 = SimpleDoubleProperty()
+    val valueProperty = SimpleObjectProperty<T>()
 
     var isConnected: Boolean = false
+
+    var destination: LinkInput<T>? = null
 
     @FXML
     fun initialize() {
         offsetX.set(100.0)
         offsetY.set(50.0)
+
+        valueProperty.addListener {
+                _, _, newValue ->
+
+            println(newValue)
+            destination?.valueProperty?.set(newValue)
+        }
 
         offsetDirX1.bind(
             When(link.startXProperty().greaterThan(link.endXProperty())).then(-1.0).otherwise(1.0)
@@ -49,11 +61,11 @@ class NodeLink : AnchorPane() {
         link.endY = point.y
     }
 
-    fun bindStart(source: LinkOutput) {
+    fun <T> bindStart(source: LinkOutput<T>) {
         bindLayoutProperty(source, link.startXProperty(), link.startYProperty())
     }
 
-    fun bindEnd(source: LinkInput) {
+    fun <T> bindEnd(source: LinkInput<T>) {
         bindLayoutProperty(source, link.endXProperty(), link.endYProperty())
     }
 
