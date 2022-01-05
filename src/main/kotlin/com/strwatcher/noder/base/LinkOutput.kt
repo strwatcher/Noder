@@ -7,8 +7,10 @@ import javafx.scene.shape.Circle
 class LinkOutput<T>: AnchorPane() {
     init {
         setPrefSize(20.0, 20.0)
+        setMaxSize(20.0, 20.0)
         val circle = Circle(10.0, Color.RED)
-        setRightAnchor(circle, -10.0)
+        circle.translateX = 20.0
+        circle.translateY = 10.0
         children.add(circle)
     }
 

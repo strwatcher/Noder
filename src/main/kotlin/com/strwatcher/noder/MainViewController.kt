@@ -1,10 +1,7 @@
 package com.strwatcher.noder
 
 import com.strwatcher.noder.base.DraggableNode
-import com.strwatcher.noder.nodes.FloatNode
-import com.strwatcher.noder.nodes.InputFloatNode
-import com.strwatcher.noder.nodes.IntNode
-import com.strwatcher.noder.nodes.StringNode
+import com.strwatcher.noder.nodes.*
 import javafx.fxml.FXML
 import javafx.scene.control.Button
 import javafx.scene.control.ScrollPane
@@ -61,7 +58,7 @@ class MainViewController {
 
         floatOutputNodeButton.setOnAction {
             println("Float Input Node created")
-            addNode(InputFloatNode(nodeState, linkState))
+            addNode(ImageNode(nodeState, linkState))
         }
     }
 

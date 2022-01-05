@@ -85,26 +85,37 @@ open class DraggableNode<T>(
 
     val linkDragDroppedHandler = EventHandler<DragEvent> {
             event ->
-
         parent.onDragOver = null
         parent.onDragDropped = null
 
+        val linkDestination = event.source as LinkInput<T>
+        val linkSource = event.gestureSource as DraggableNode<T>
         val connectedLink = (event.gestureSource as DraggableNode<T>).link
 
-        connectedLink.bindEnd(event.source as LinkInput<T>)
-        connectedLink.isConnected = true
-        connectedLink.destination = event.source as LinkInput<T>
 
-        val value = connectedLink.valueProperty.value
-        connectedLink.valueProperty.set(null)
-        connectedLink.valueProperty.set(value)
+        if(
+            connectedLink.valueProperty::class == linkDestination.valueProperty::class
+            && !linkDestination.isConnected
+            && linkSource != this
+        ) {
+            connectedLink.bindEnd(linkDestination)
+            connectedLink.isConnected = true
+            connectedLink.destination = linkDestination
+            linkDestination.valueProperty.set(connectedLink.valueProperty.value)
+            linkDestination.connectedLink = connectedLink
+            connectedLinks.add(connectedLink)
 
-        connectedLinks.add(connectedLink)
+            val content = ClipboardContent()
 
-        val content = ClipboardContent()
-
-        content[linkState] = "link"
-        startDragAndDrop(*TransferMode.ANY).setContent(content)
+            content[linkState] = "link"
+            startDragAndDrop(*TransferMode.ANY).setContent(content)
+        } else {
+            parent.onDragDropped = null
+            parent.onDragOver = null
+            connectedLink.isVisible = false
+            (event.gestureSource as DraggableNode<T>).superParent!!.children.removeAt(0)
+            event.isDropCompleted = true
+        }
         event.consume()
     }
 
@@ -124,6 +135,13 @@ open class DraggableNode<T>(
         )
     }
 
+    fun removeLink(link: NodeLink<T>) {
+        superParent!!.children.remove(link)
+        link.isConnected = false
+        link.unbindEnd()
+        link.destination?.valueProperty?.set(link.destination?.defaultValue)
+        link.destination?.connectedLink = null
+    }
 
     init {
         loader.setController(this)
@@ -135,11 +153,8 @@ open class DraggableNode<T>(
         }
 
         link.setOnMouseClicked {
-            superParent!!.children.remove(link)
-            link.isConnected = false
-            link.unbindEnd()
+            removeLink(link)
         }
-
     }
 
 }

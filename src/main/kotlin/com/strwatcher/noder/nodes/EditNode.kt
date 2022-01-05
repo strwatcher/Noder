@@ -3,26 +3,61 @@ package com.strwatcher.noder.nodes
 import com.strwatcher.noder.base.LinkOutput
 import com.strwatcher.noder.base.ValueNode
 import javafx.fxml.FXML
+import javafx.fxml.FXMLLoader
 import javafx.scene.control.TextField
 import javafx.scene.input.DataFormat
+import javafx.scene.layout.Border
+import javafx.scene.layout.BorderStroke
+import javafx.scene.layout.BorderStrokeStyle
+import javafx.scene.layout.CornerRadii
+import javafx.scene.paint.Paint
 
-open class EditNode<T>(nodeState: DataFormat, linkState: DataFormat): ValueNode<T>(nodeState, linkState) {
+abstract class EditNode<T>(
+    nodeState: DataFormat,
+    linkState: DataFormat,
+    private val validatorRegex: Regex
+    ): ValueNode<T>(nodeState, linkState, FXMLLoader(EditNode::class.java.getResource("EditNode.fxml"))
+) {
     protected lateinit var valueOutput: LinkOutput<T>
+
+    @FXML
     protected lateinit var editField: TextField
+
     @FXML
     override fun initialize() {
         super.initialize()
         valueOutput = LinkOutput()
         valueOutput.onDragDetected = linkDragDetectedHandler
-        editField = TextField()
-        editField.prefWidth = 64.0
-        editField.prefHeight = 36.0
-        editField.layoutX = 34.0
-        editField.layoutY = 33.0
-        valueContainer.children.add(editField)
         outputLayout.children.add(valueOutput)
 
         draggedArea.onDragDetected = dragDetectedHandler
-
+        editField.textProperty().addListener {
+                _, _, new ->
+            validatorRegex ?: return@addListener
+            if (!new.matches(validatorRegex)) {
+                valueOutput.onDragDetected = null
+                editField.border = Border(
+                    BorderStroke(
+                        Paint.valueOf("FF0000"),
+                        BorderStrokeStyle.SOLID,
+                        CornerRadii(5.0),
+                        BorderStroke.DEFAULT_WIDTHS)
+                )
+            }
+            else {
+                valueOutput.onDragDetected = linkDragDetectedHandler
+                value = toValue(editField.text)
+                link.valueProperty.set(value)
+                editField.border = Border(
+                    BorderStroke(
+                        Paint.valueOf("000000"),
+                        BorderStrokeStyle.SOLID,
+                        CornerRadii(5.0),
+                        BorderStroke.DEFAULT_WIDTHS)
+                )
+            }
+        }
     }
+
+    abstract fun toValue(text: String): T
 }

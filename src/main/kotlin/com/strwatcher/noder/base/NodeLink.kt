@@ -83,7 +83,8 @@ class NodeLink<T>(private val source: DraggableNode<T>) : AnchorPane() {
                 .add(source.parent.parent.parent.layoutXProperty())
 
         val currentBindingY =
-            Bindings.add(source.layoutYProperty(), source.parent.layoutYProperty())
+            Bindings.add(source.layoutYProperty(), source.height / 2.0)
+                .add(source.parent.layoutYProperty())
                 .add(source.parent.parent.layoutYProperty())
                 .add(source.parent.parent.parent.layoutYProperty())
 

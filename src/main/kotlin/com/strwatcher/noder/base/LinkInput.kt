@@ -5,12 +5,17 @@ import javafx.scene.layout.AnchorPane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 
-class LinkInput<T>: AnchorPane() {
-    val valueProperty = SimpleObjectProperty<T>()
+class LinkInput<T>(initialValue: T): AnchorPane() {
+    val valueProperty = SimpleObjectProperty(initialValue)
+    var defaultValue: T = initialValue
+    var connectedLink: NodeLink<T>? = null
+    val isConnected: Boolean
+        get() = connectedLink != null
 
     init {
         setPrefSize(20.0, 20.0)
         val circle = Circle(10.0, Color.AQUA)
+        circle.translateY = 10.0
         children.add(circle)
     }
 }

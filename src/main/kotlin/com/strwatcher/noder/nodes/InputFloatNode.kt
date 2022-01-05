@@ -9,7 +9,7 @@ class InputFloatNode(nodeState: DataFormat, linkState: DataFormat): FloatNode(no
     override fun initialize() {
         super.initialize()
 
-        inputFloatLink = LinkInput()
+        inputFloatLink = LinkInput(0.0f)
         inputFloatLink.onDragDropped = linkDragDroppedHandler
         inputLayout.children.add(inputFloatLink)
 
@@ -21,4 +21,5 @@ class InputFloatNode(nodeState: DataFormat, linkState: DataFormat): FloatNode(no
         }
 
     }
+
 }

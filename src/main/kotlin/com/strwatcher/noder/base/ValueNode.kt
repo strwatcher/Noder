@@ -8,10 +8,10 @@ import javafx.scene.input.DataFormat
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.VBox
 
-open class ValueNode<T>(nodeState: DataFormat, linkState: DataFormat): DraggableNode<T>(
+open class ValueNode<T>(nodeState: DataFormat, linkState: DataFormat, loader: FXMLLoader): DraggableNode<T>(
     nodeState,
     linkState,
-    FXMLLoader(ValueNode::class.java.getResource("ValueNode.fxml"))
+    loader
 ) {
     @FXML
     lateinit var nodeTitle: Label
@@ -26,9 +26,6 @@ open class ValueNode<T>(nodeState: DataFormat, linkState: DataFormat): Draggable
     lateinit var draggedArea: AnchorPane
 
     @FXML
-    lateinit var valueContainer: AnchorPane
-
-    @FXML
     lateinit var deleteButton: Button
 
     @FXML
@@ -39,12 +36,10 @@ open class ValueNode<T>(nodeState: DataFormat, linkState: DataFormat): Draggable
 
             (parent as AnchorPane).children.remove(this)
             for(link: NodeLink<T> in connectedLinks) {
-                superParent!!.children.remove(link)
-                link.isConnected = false
-                link.unbindEnd()
+                removeLink(link)
             }
 
-            superParent!!.children.remove(link)
+            removeLink(link)
         }
     }
 
