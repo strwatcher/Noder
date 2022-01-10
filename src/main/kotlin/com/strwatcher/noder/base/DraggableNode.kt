@@ -7,7 +7,7 @@ import javafx.scene.input.*
 import javafx.scene.layout.AnchorPane
 
 
-open class DraggableNode<T>(
+abstract class DraggableNode<T>(
     private val nodeState: DataFormat,
     private val linkState: DataFormat,
     loader: FXMLLoader
@@ -113,7 +113,7 @@ open class DraggableNode<T>(
             parent.onDragDropped = null
             parent.onDragOver = null
             connectedLink.isVisible = false
-            (event.gestureSource as DraggableNode<T>).superParent!!.children.removeAt(0)
+            linkSource.superParent!!.children.removeAt(0)
             event.isDropCompleted = true
         }
         event.consume()
@@ -121,7 +121,7 @@ open class DraggableNode<T>(
 
 
     private var offset = Point2D(0.0, 0.0)
-    protected var superParent: AnchorPane? = null
+    private var superParent: AnchorPane? = null
     var link = NodeLink(this)
     var value: T? = null
     protected val connectedLinks = mutableListOf<NodeLink<T>>()

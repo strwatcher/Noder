@@ -8,7 +8,7 @@ import javafx.scene.input.DataFormat
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.VBox
 
-open class ValueNode<T>(nodeState: DataFormat, linkState: DataFormat, loader: FXMLLoader): DraggableNode<T>(
+abstract class ValueNode<T>(nodeState: DataFormat, linkState: DataFormat, loader: FXMLLoader): DraggableNode<T>(
     nodeState,
     linkState,
     loader
