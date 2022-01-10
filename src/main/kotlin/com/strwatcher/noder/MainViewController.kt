@@ -3,9 +3,11 @@ package com.strwatcher.noder
 import com.strwatcher.noder.base.DraggableNode
 import com.strwatcher.noder.nodes.*
 import com.strwatcher.noder.nodes.edit_nodes.FloatNode
+import com.strwatcher.noder.nodes.edit_nodes.ImageNode
 import com.strwatcher.noder.nodes.edit_nodes.IntNode
 import com.strwatcher.noder.nodes.edit_nodes.StringNode
 import com.strwatcher.noder.nodes.filter_nodes.AddTextNode
+import com.strwatcher.noder.nodes.filter_nodes.GrayFilterNode
 import com.strwatcher.noder.nodes.filter_nodes.SepiaNode
 import javafx.fxml.FXML
 import javafx.scene.control.Button
@@ -49,6 +51,12 @@ class MainViewController {
     private lateinit var addTextNodeButton: Button
 
     @FXML
+    private lateinit var grayNodeButton: Button
+
+    @FXML
+    private lateinit var ImageNodeButton: Button
+
+    @FXML
     fun initialize() {
         OpenCV.loadLocally()
 
@@ -75,6 +83,16 @@ class MainViewController {
         addTextNodeButton.setOnAction {
             println("Add Text Node created")
             addNode(AddTextNode(nodeState, linkState))
+        }
+
+        grayNodeButton.setOnAction {
+            println("Gray Filter Node created")
+            addNode(GrayFilterNode(nodeState, linkState))
+        }
+
+        ImageNodeButton.setOnAction {
+            println("Image Node created")
+            addNode(ImageNode(nodeState, linkState))
         }
 
         addNode(StartNode(nodeState, linkState))

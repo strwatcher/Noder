@@ -1,11 +1,11 @@
 package com.strwatcher.noder.nodes
 
-import com.strwatcher.noder.base.ConstNode
+import com.strwatcher.noder.base.BaseImageNode
 import com.strwatcher.noder.base.LinkInput
 import javafx.fxml.FXML
 import javafx.scene.input.DataFormat
 
-class EndNode(nodeState: DataFormat, linkState: DataFormat): ConstNode(nodeState, linkState) {
+class EndNode(nodeState: DataFormat, linkState: DataFormat): BaseImageNode(nodeState, linkState) {
     @FXML
     override fun initialize() {
         super.initialize()
@@ -20,5 +20,7 @@ class EndNode(nodeState: DataFormat, linkState: DataFormat): ConstNode(nodeState
             image.image = newValue
         }
         grid.add(input, 0, 2)
+
+        grid.children.remove(deleteButton)
     }
 }

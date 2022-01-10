@@ -4,7 +4,7 @@ import javafx.fxml.FXML
 import javafx.scene.image.Image
 import javafx.scene.input.DataFormat
 
-abstract class FilterNode(nodeState: DataFormat, linkState: DataFormat): ImageNode(nodeState, linkState) {
+abstract class FilterNode(nodeState: DataFormat, linkState: DataFormat): BaseImageNode(nodeState, linkState) {
     lateinit var imageInput: LinkInput<Image>
     lateinit var imageOutput: LinkOutput<Image>
 

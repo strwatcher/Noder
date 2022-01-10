@@ -41,11 +41,22 @@
                         <Font size="26.0" />
                      </font>
                   </Button>
+                  <Button fx:id="grayNodeButton" layoutX="20.0" layoutY="86.0" mnemonicParsing="false" text="GrayNode">
+                     <font>
+                        <Font size="26.0" />
+                     </font>
+                  </Button>
                   <Button fx:id="addTextNodeButton" layoutX="20.0" layoutY="86.0" mnemonicParsing="false" text="AddTextNode">
                   <font>
                      <Font size="26.0" />
                   </font>
                </Button>
+
+                  <Button fx:id="ImageNodeButton" layoutX="20.0" layoutY="86.0" mnemonicParsing="false" text="ImageNode">
+                     <font>
+                        <Font size="26.0" />
+                     </font>
+                  </Button>
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" top="10.0" />

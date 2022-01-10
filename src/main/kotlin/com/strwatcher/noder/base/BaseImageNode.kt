@@ -8,10 +8,9 @@ import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.DataFormat
 import javafx.scene.layout.GridPane
-import javafx.scene.layout.RowConstraints
 
-open class ImageNode(nodeState: DataFormat, linkState: DataFormat):
-    ValueNode<Image>(nodeState, linkState, FXMLLoader(ImageNode::class.java.getResource("ImageNode.fxml")))
+open class BaseImageNode(nodeState: DataFormat, linkState: DataFormat):
+    ValueNode<Image>(nodeState, linkState, FXMLLoader(BaseImageNode::class.java.getResource("ImageNode.fxml")))
 {
     @FXML
     lateinit var image: ImageView
