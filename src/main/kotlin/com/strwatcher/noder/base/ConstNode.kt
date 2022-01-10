@@ -1,4 +1,4 @@
-package com.strwatcher.noder.nodes
+package com.strwatcher.noder.base
 
 import javafx.fxml.FXML
 import javafx.scene.input.DataFormat

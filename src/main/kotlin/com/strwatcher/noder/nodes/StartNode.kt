@@ -1,11 +1,13 @@
 package com.strwatcher.noder.nodes
 
+import com.strwatcher.noder.base.ConstNode
 import com.strwatcher.noder.base.LinkOutput
 import javafx.embed.swing.SwingFXUtils
 import javafx.fxml.FXML
 import javafx.scene.control.Button
 import javafx.scene.image.Image
 import javafx.scene.input.DataFormat
+import javafx.scene.layout.RowConstraints
 import javafx.stage.FileChooser
 import javafx.stage.Stage
 import javax.imageio.ImageIO
@@ -16,8 +18,12 @@ class StartNode(nodeState: DataFormat, linkState: DataFormat): ConstNode(nodeSta
     override fun initialize() {
         super.initialize()
 
+        nodeTitle.text = "Start Node"
+
+        grid.rowConstraints.add(RowConstraints(100.0))
         val openButton = Button("Open image")
         grid.add(openButton, 1, 3)
+
         openButton.setOnAction {
             val img = importImage()
             valueProperty.set(img)

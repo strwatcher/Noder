@@ -2,12 +2,18 @@ package com.strwatcher.noder
 
 import com.strwatcher.noder.base.DraggableNode
 import com.strwatcher.noder.nodes.*
+import com.strwatcher.noder.nodes.edit_nodes.FloatNode
+import com.strwatcher.noder.nodes.edit_nodes.IntNode
+import com.strwatcher.noder.nodes.edit_nodes.StringNode
+import com.strwatcher.noder.nodes.filter_nodes.AddTextNode
+import com.strwatcher.noder.nodes.filter_nodes.SepiaNode
 import javafx.fxml.FXML
 import javafx.scene.control.Button
 import javafx.scene.control.ScrollPane
 import javafx.scene.input.DataFormat
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.VBox
+import nu.pattern.OpenCV
 
 class MainViewController {
     private val nodeState = DataFormat("nodeState")
@@ -37,10 +43,15 @@ class MainViewController {
     private lateinit var stringNodeButton: Button
 
     @FXML
-    private lateinit var floatOutputNodeButton: Button
+    private lateinit var sepiaNodeButton: Button
+
+    @FXML
+    private lateinit var addTextNodeButton: Button
 
     @FXML
     fun initialize() {
+        OpenCV.loadLocally()
+
         intNodeButton.setOnAction {
             println("Int Node Created")
             addNode(IntNode(nodeState, linkState))
@@ -56,13 +67,18 @@ class MainViewController {
             addNode(StringNode(nodeState, linkState))
         }
 
-        floatOutputNodeButton.setOnAction {
-            println("Float Input Node created")
-            addNode(ImageNode(nodeState, linkState))
+        sepiaNodeButton.setOnAction {
+            println("Sepia Node created")
+            addNode(SepiaNode(nodeState, linkState))
+        }
+
+        addTextNodeButton.setOnAction {
+            println("Add Text Node created")
+            addNode(AddTextNode(nodeState, linkState))
         }
 
         addNode(StartNode(nodeState, linkState))
-        addNode(EndNode(nodeState, linkState))
+        addNode(EndNode(nodeState, linkState).also { it.layoutX = 400.0 })
 
     }
 

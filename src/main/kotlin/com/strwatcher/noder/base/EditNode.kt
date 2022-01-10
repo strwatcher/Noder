@@ -1,7 +1,5 @@
-package com.strwatcher.noder.nodes
+package com.strwatcher.noder.base
 
-import com.strwatcher.noder.base.LinkOutput
-import com.strwatcher.noder.base.ValueNode
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.control.TextField

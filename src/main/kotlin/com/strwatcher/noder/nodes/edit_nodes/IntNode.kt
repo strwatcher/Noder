@@ -1,5 +1,6 @@
-package com.strwatcher.noder.nodes
+package com.strwatcher.noder.nodes.edit_nodes
 
+import com.strwatcher.noder.base.EditNode
 import javafx.fxml.FXML
 import javafx.scene.input.DataFormat
 

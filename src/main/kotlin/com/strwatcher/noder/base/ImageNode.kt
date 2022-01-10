@@ -1,7 +1,5 @@
-package com.strwatcher.noder.nodes
+package com.strwatcher.noder.base
 
-import com.strwatcher.noder.base.LinkInput
-import com.strwatcher.noder.base.ValueNode
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.fxml.FXML
@@ -10,7 +8,6 @@ import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.DataFormat
 import javafx.scene.layout.GridPane
-import javafx.scene.layout.Pane
 import javafx.scene.layout.RowConstraints
 
 open class ImageNode(nodeState: DataFormat, linkState: DataFormat):
@@ -35,7 +32,6 @@ open class ImageNode(nodeState: DataFormat, linkState: DataFormat):
 
         image.fitWidthProperty().bind(Bindings.add(imageColumn.prefWidthProperty(), -10.0))
         image.fitHeightProperty().bind(Bindings.add(imageRow.prefHeightProperty(), - 10.0))
-        grid.rowConstraints.add(RowConstraints(100.0))
 
         valueProperty.addListener { _, _, newValue ->
             link.valueProperty.set(newValue)

@@ -1,9 +1,8 @@
-package com.strwatcher.noder.nodes
+package com.strwatcher.noder.nodes.edit_nodes
 
+import com.strwatcher.noder.base.EditNode
 import javafx.fxml.FXML
 import javafx.scene.input.DataFormat
-import javafx.scene.layout.*
-import javafx.scene.paint.Paint
 
 open class FloatNode(
     nodeState: DataFormat,
