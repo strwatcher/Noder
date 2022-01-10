@@ -51,8 +51,8 @@ class NodeLink<T>(private val source: DraggableNode<T>) : AnchorPane() {
 
         link.controlX1Property().bind(Bindings.add(link.startXProperty(), offsetX.multiply(offsetDirX1)))
         link.controlX2Property().bind(Bindings.add(link.endXProperty(), offsetX.multiply(offsetDirX2)))
-        link.controlY1Property().bind(Bindings.add(link.startYProperty(), offsetX.multiply(offsetDirY1)))
-        link.controlY2Property().bind(Bindings.add(link.endYProperty(), offsetX.multiply(offsetDirY2)))
+        link.controlY1Property().bind(Bindings.add(link.startYProperty(), offsetY.multiply(offsetDirY1)))
+        link.controlY2Property().bind(Bindings.add(link.endYProperty(), offsetY.multiply(offsetDirY2)))
 
     }
 

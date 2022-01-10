@@ -10,6 +10,7 @@ module com.strwatcher.noder {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires javafx.swing;
 
     opens com.strwatcher.noder to javafx.fxml;
     exports com.strwatcher.noder;

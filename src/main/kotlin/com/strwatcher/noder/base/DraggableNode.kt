@@ -139,8 +139,10 @@ open class DraggableNode<T>(
         superParent!!.children.remove(link)
         link.isConnected = false
         link.unbindEnd()
-        link.destination?.valueProperty?.set(link.destination?.defaultValue)
         link.destination?.connectedLink = null
+        link.destination?.valueProperty?.set(link.destination?.defaultValue)
+        link.destination = null
+
     }
 
     init {

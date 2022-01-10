@@ -60,6 +60,10 @@ class MainViewController {
             println("Float Input Node created")
             addNode(ImageNode(nodeState, linkState))
         }
+
+        addNode(StartNode(nodeState, linkState))
+        addNode(EndNode(nodeState, linkState))
+
     }
 
     private fun <T> addNode(node: DraggableNode<T>) {
