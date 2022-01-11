@@ -61,6 +61,9 @@ class MainViewController {
    private lateinit var brightnessNodeButton: Button
 
    @FXML
+   private lateinit var blurNodeButton: Button
+
+   @FXML
     fun initialize() {
         OpenCV.loadLocally()
 
@@ -107,6 +110,11 @@ class MainViewController {
        brightnessNodeButton.setOnAction {
            println("Brightness Node created")
            addNode(BrightnessNode(nodeState, linkState))
+       }
+
+       blurNodeButton.setOnAction {
+           println("Blur Node created")
+           addNode(BlurNode(nodeState, linkState))
        }
 
         addNode(StartNode(nodeState, linkState))
