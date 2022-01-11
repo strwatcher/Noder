@@ -7,7 +7,7 @@ import javafx.scene.input.DataFormat
 class StringNode(
     nodeState: DataFormat,
     linkState: DataFormat,
-): EditNode<String>(nodeState, linkState, Regex("^\\S*")) {
+): EditNode<String>(nodeState, linkState, Regex("^[\\s\\S]*")) {
 
     @FXML
     override fun initialize() {

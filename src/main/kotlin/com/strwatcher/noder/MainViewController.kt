@@ -6,9 +6,7 @@ import com.strwatcher.noder.nodes.edit_nodes.FloatNode
 import com.strwatcher.noder.nodes.edit_nodes.ImageNode
 import com.strwatcher.noder.nodes.edit_nodes.IntNode
 import com.strwatcher.noder.nodes.edit_nodes.StringNode
-import com.strwatcher.noder.nodes.filter_nodes.AddTextNode
-import com.strwatcher.noder.nodes.filter_nodes.GrayFilterNode
-import com.strwatcher.noder.nodes.filter_nodes.SepiaNode
+import com.strwatcher.noder.nodes.filter_nodes.*
 import javafx.fxml.FXML
 import javafx.scene.control.Button
 import javafx.scene.control.ScrollPane
@@ -54,9 +52,15 @@ class MainViewController {
     private lateinit var grayNodeButton: Button
 
     @FXML
-    private lateinit var ImageNodeButton: Button
+    private lateinit var imageNodeButton: Button
 
     @FXML
+    private lateinit var addImageNodeButton: Button
+
+   @FXML
+   private lateinit var brightnessNodeButton: Button
+
+   @FXML
     fun initialize() {
         OpenCV.loadLocally()
 
@@ -90,10 +94,20 @@ class MainViewController {
             addNode(GrayFilterNode(nodeState, linkState))
         }
 
-        ImageNodeButton.setOnAction {
+        imageNodeButton.setOnAction {
             println("Image Node created")
             addNode(ImageNode(nodeState, linkState))
         }
+
+        addImageNodeButton.setOnAction {
+            println("Add Image Node created")
+            addNode(AddImageNode(nodeState, linkState))
+        }
+
+       brightnessNodeButton.setOnAction {
+           println("Brightness Node created")
+           addNode(BrightnessNode(nodeState, linkState))
+       }
 
         addNode(StartNode(nodeState, linkState))
         addNode(EndNode(nodeState, linkState).also { it.layoutX = 400.0 })

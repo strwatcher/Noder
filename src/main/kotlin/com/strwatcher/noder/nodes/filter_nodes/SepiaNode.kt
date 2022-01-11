@@ -11,12 +11,11 @@ import org.opencv.core.CvType
 import org.opencv.core.Mat
 
 class SepiaNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeState, linkState) {
-    lateinit var mSepiaKernel: Mat
+    private lateinit var mSepiaKernel: Mat
 
     @FXML
     override fun initialize() {
         super.initialize()
-        nodeTitle.text = "Sepia"
         mSepiaKernel =  Mat(4, 4, CvType.CV_32F)
         mSepiaKernel.put(0, 0, /* R */0.272, 0.534, 0.131, 0.0)
         mSepiaKernel.put(1, 0, /* G */0.349, 0.686, 0.168, 0.0)
@@ -24,13 +23,14 @@ class SepiaNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeSt
         mSepiaKernel.put(3, 0, /* A */0.000, 0.000, 0.000, 1.0)
     }
 
-    override fun filterImage(img: Image?): Image? {
-        img?.let {
-            val tmpMat: Mat = imageToMat(img)
-            val resultMat = Mat()
-            Core.transform(tmpMat, resultMat, mSepiaKernel)
-            return matToImage(resultMat)
-        }
-        return null
+    override fun filterFunction(img: Image): Image {
+        val tmpMat: Mat = imageToMat(img)
+        val resultMat = Mat()
+        Core.transform(tmpMat, resultMat, mSepiaKernel)
+        return matToImage(resultMat)
+    }
+
+    override fun setTitle() {
+        nodeTitle.text = "Sepia"
     }
 }

@@ -2,32 +2,30 @@ package com.strwatcher.noder.nodes.filter_nodes
 
 import com.strwatcher.noder.base.FilterNode
 import com.strwatcher.noder.base.LinkInput
-import com.strwatcher.noder.utils.labelFont
 import javafx.embed.swing.SwingFXUtils
 import javafx.fxml.FXML
-import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.scene.input.DataFormat
-import javafx.scene.layout.RowConstraints
 import java.awt.Color
 import java.awt.Font
 
-class AddTextNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeState, linkState) {
+class AddImageNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeState, linkState) {
     private lateinit var xInput: LinkInput<Int?>
     private lateinit var yInput: LinkInput<Int?>
-    private lateinit var textInput: LinkInput<String?>
+    private lateinit var addingImageInput: LinkInput<Image?>
 
     @FXML
     override fun initialize() {
         super.initialize()
+
         xInput = LinkInput(null)
         yInput = LinkInput(null)
-        textInput = LinkInput(null)
+        addingImageInput = LinkInput(null)
 
         inputs = mapOf(
+            Pair(addingImageInput, "Image"),
             Pair(xInput, "x"),
-            Pair(yInput, "y"),
-            Pair(textInput, "Text")
+            Pair(yInput, "y")
         )
 
         addInputs(3)
@@ -40,17 +38,17 @@ class AddTextNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(node
         val graphics = bufferedImage.graphics
         graphics.font = font
         graphics.color = Color.BLACK
-        graphics.drawString(
-            textInput.valueProperty.value!!,
+        graphics.drawImage(
+            SwingFXUtils.fromFXImage(addingImageInput.valueProperty.value!!, null),
             xInput.valueProperty.value!!,
-            yInput.valueProperty.value!!
+            yInput.valueProperty.value!!,
+            null
         )
 
         return SwingFXUtils.toFXImage(bufferedImage, null)
     }
 
     override fun setTitle() {
-        nodeTitle.text = "Add Text"
+        nodeTitle.text = "Add Image"
     }
-
 }

@@ -7,7 +7,7 @@ import javafx.scene.input.DataFormat
 class IntNode(
     nodeState: DataFormat,
     linkState: DataFormat,
-): EditNode<Int>(nodeState, linkState, Regex("^\\d+\$")) {
+): EditNode<Int>(nodeState, linkState, Regex("^[+-]?\\d+\$")) {
     @FXML
     override fun initialize() {
         super.initialize()
