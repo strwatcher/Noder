@@ -13,6 +13,7 @@ import javafx.scene.control.ScrollPane
 import javafx.scene.input.DataFormat
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.VBox
+import javafx.scene.transform.Scale
 import nu.pattern.OpenCV
 
 class MainViewController {
@@ -62,6 +63,18 @@ class MainViewController {
 
    @FXML
    private lateinit var blurNodeButton: Button
+
+   @FXML
+   private lateinit var invertNodeButton: Button
+
+   @FXML
+   private lateinit var moveNodeButton: Button
+
+   @FXML
+   private lateinit var scaleNodeButton: Button
+
+   @FXML
+   private lateinit var rotateNodeButton: Button
 
    @FXML
     fun initialize() {
@@ -117,8 +130,28 @@ class MainViewController {
            addNode(BlurNode(nodeState, linkState))
        }
 
+       invertNodeButton.setOnAction {
+           println("Invert Node created")
+           addNode(InvertNode(nodeState, linkState))
+       }
+
+       rotateNodeButton.setOnAction {
+           println("Rotate Node created")
+           addNode(RotationNode(nodeState, linkState))
+       }
+
+       scaleNodeButton.setOnAction {
+           println("Scale Node created")
+           addNode(ScaleNode(nodeState, linkState))
+       }
+
+       moveNodeButton.setOnAction {
+           println("Move Node created")
+           addNode(MoveNode(nodeState, linkState))
+       }
+
         addNode(StartNode(nodeState, linkState))
-        addNode(EndNode(nodeState, linkState).also { it.layoutX = 400.0 })
+        addNode(EndNode(nodeState, linkState).also { it.layoutX = 700.0 })
 
     }
 

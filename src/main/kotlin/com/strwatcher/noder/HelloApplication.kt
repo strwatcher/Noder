@@ -11,7 +11,7 @@ class HelloApplication : Application() {
         val scene = Scene(fxmlLoader.load())
         stage.title = "Hello!"
         stage.scene = scene
-        stage.isFullScreen = true
+        stage.isMaximized = true
         stage.show()
     }
 }

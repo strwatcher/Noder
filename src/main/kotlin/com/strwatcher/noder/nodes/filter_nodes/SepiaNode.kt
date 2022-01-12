@@ -21,6 +21,7 @@ class SepiaNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeSt
         mSepiaKernel.put(1, 0, /* G */0.349, 0.686, 0.168, 0.0)
         mSepiaKernel.put(2, 0, /* B */0.393, 0.769, 0.189, 0.0)
         mSepiaKernel.put(3, 0, /* A */0.000, 0.000, 0.000, 1.0)
+        inputs = mapOf()
     }
 
     override fun filterFunction(img: Image): Image {

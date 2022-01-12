@@ -11,6 +11,12 @@ import org.opencv.imgproc.Imgproc
 
 class GrayFilterNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeState, linkState) {
 
+    @FXML
+    override fun initialize() {
+        super.initialize()
+        inputs = mapOf()
+    }
+
     override fun filterFunction(img: Image): Image {
         val tmpMat = imageToMat(img)
         val resultMat = Mat()
