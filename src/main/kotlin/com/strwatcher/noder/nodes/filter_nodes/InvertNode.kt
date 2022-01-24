@@ -1,6 +1,7 @@
 package com.strwatcher.noder.nodes.filter_nodes
 
 import com.strwatcher.noder.base.FilterNode
+import com.strwatcher.noder.base.InvertNodeType
 import com.strwatcher.noder.imageToMat
 import com.strwatcher.noder.matToImage
 import javafx.embed.swing.SwingFXUtils
@@ -13,12 +14,13 @@ import org.opencv.core.Scalar
 import org.opencv.imgproc.Imgproc
 import java.awt.Color
 
-class InvertNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeState, linkState) {
+class InvertNode(nodeState: DataFormat, linkState: DataFormat, id: UInt): FilterNode(nodeState, linkState, id) {
 
     @FXML
     override fun initialize() {
         super.initialize()
         inputs = mapOf()
+        initInputs()
     }
 
     override fun filterFunction(img: Image): Image {
@@ -42,6 +44,15 @@ class InvertNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeS
 
     override fun setTitle() {
         nodeTitle.text = "Invert"
+    }
+
+    override fun initType(): String = InvertNodeType
+    override fun initInputs() {
+        linkInputs.addAll(
+            listOf(
+                imageInput,
+            )
+        )
     }
 
 }

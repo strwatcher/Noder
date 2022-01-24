@@ -12,13 +12,14 @@ module com.strwatcher.noder {
     requires eu.hansolo.tilesfx;
     requires javafx.swing;
     requires opencv;
+    requires com.google.gson;
 
-    opens com.strwatcher.noder to javafx.fxml;
+    opens com.strwatcher.noder to javafx.fxml, com.google.gson;
     exports com.strwatcher.noder;
-    opens com.strwatcher.noder.base to javafx.fxml;
+    opens com.strwatcher.noder.base to javafx.fxml, com.google.gson;
     exports com.strwatcher.noder.base;
-    opens com.strwatcher.noder.nodes to javafx.fxml;
+    opens com.strwatcher.noder.nodes to javafx.fxml, com.google.gson;
     exports com.strwatcher.noder.nodes;
-    opens com.strwatcher.noder.nodes.edit_nodes to javafx.fxml;
-    opens com.strwatcher.noder.nodes.filter_nodes to javafx.fxml;
+    opens com.strwatcher.noder.nodes.edit_nodes to javafx.fxml, com.google.gson;
+    opens com.strwatcher.noder.nodes.filter_nodes to javafx.fxml, com.google.gson;
 }

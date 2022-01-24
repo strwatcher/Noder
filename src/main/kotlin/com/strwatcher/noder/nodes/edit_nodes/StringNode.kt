@@ -1,13 +1,15 @@
 package com.strwatcher.noder.nodes.edit_nodes
 
 import com.strwatcher.noder.base.EditNode
+import com.strwatcher.noder.base.StringNodeType
 import javafx.fxml.FXML
 import javafx.scene.input.DataFormat
 
 class StringNode(
     nodeState: DataFormat,
     linkState: DataFormat,
-): EditNode<String>(nodeState, linkState, Regex("^[\\s\\S]*")) {
+    id: UInt
+): EditNode<String>(nodeState, linkState, id, Regex("^[\\s\\S]*")) {
 
     @FXML
     override fun initialize() {
@@ -19,4 +21,7 @@ class StringNode(
     }
 
     override fun toValue(text: String): String = text
+    override fun initType(): String = StringNodeType
+    override fun initInputs() {
+    }
 }

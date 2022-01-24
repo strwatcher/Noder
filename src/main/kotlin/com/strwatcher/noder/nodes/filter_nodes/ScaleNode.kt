@@ -2,16 +2,18 @@ package com.strwatcher.noder.nodes.filter_nodes
 
 import com.strwatcher.noder.base.FilterNode
 import com.strwatcher.noder.base.LinkInput
+import com.strwatcher.noder.base.ScaleNodeType
 import javafx.embed.swing.SwingFXUtils
 import javafx.fxml.FXML
 import javafx.scene.image.Image
 import javafx.scene.input.DataFormat
+import javafx.scene.transform.Scale
 import java.awt.geom.AffineTransform
 import java.awt.image.AffineTransformOp
 import java.awt.image.BufferedImage
 import kotlin.math.floor
 
-class ScaleNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeState, linkState){
+class ScaleNode(nodeState: DataFormat, linkState: DataFormat, id: UInt): FilterNode(nodeState, linkState, id){
     private lateinit var xInput: LinkInput<Float?>
     private lateinit var yInput: LinkInput<Float?>
 
@@ -19,14 +21,15 @@ class ScaleNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeSt
     override fun initialize() {
         super.initialize()
 
-        xInput = LinkInput(null)
-        yInput = LinkInput(null)
+        xInput = LinkInput(null, this)
+        yInput = LinkInput(null, this)
 
         inputs = mapOf(
             Pair(xInput, "x"),
             Pair(yInput, "y")
         )
 
+        initInputs()
         addInputs(3)
         bindInputs()
     }
@@ -51,5 +54,16 @@ class ScaleNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeSt
 
     override fun setTitle() {
         nodeTitle.text = "Scale"
+    }
+
+    override fun initType(): String = ScaleNodeType
+    override fun initInputs() {
+        linkInputs.addAll(
+            listOf(
+                imageInput,
+                xInput,
+                yInput
+            )
+        )
     }
 }

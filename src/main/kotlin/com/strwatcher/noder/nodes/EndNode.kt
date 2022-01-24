@@ -2,34 +2,37 @@ package com.strwatcher.noder.nodes
 
 import com.strwatcher.noder.Prerender
 import com.strwatcher.noder.base.BaseImageNode
+import com.strwatcher.noder.base.EndNodeType
 import com.strwatcher.noder.base.LinkInput
 import javafx.embed.swing.SwingFXUtils
 import javafx.fxml.FXML
 import javafx.scene.Scene
 import javafx.scene.control.Button
+import javafx.scene.image.Image
 import javafx.scene.input.DataFormat
 import javafx.scene.layout.RowConstraints
 import javafx.stage.FileChooser
 import javafx.stage.Stage
+import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
 import javax.imageio.ImageIO
 
-class EndNode(nodeState: DataFormat, linkState: DataFormat): BaseImageNode(nodeState, linkState) {
+class EndNode(nodeState: DataFormat, linkState: DataFormat, id: UInt): BaseImageNode(nodeState, linkState, id) {
     private var prerender: Prerender? = null
 
+    lateinit var input: LinkInput<BufferedImage>
     @FXML
     override fun initialize() {
         super.initialize()
 
         nodeTitle.text = "End Node"
-
-        val input = LinkInput(image.image)
+        input = LinkInput(SwingFXUtils.fromFXImage(image.image, null), this)
         input.onDragDropped = linkDragDroppedHandler
         input.valueProperty.addListener {
                 _, _, newValue ->
             valueProperty.value = newValue
-            image.image = newValue
+            image.image = SwingFXUtils.toFXImage(newValue, null)
         }
         grid.add(input, 0, 2)
 
@@ -46,6 +49,13 @@ class EndNode(nodeState: DataFormat, linkState: DataFormat): BaseImageNode(nodeS
             openPrerender()
         }
 
+        initInputs()
+
+    }
+
+    override fun initType(): String = EndNodeType
+    override fun initInputs() {
+       linkInputs.add(input)
     }
 
     private fun openPrerender() {
@@ -77,7 +87,7 @@ class EndNode(nodeState: DataFormat, linkState: DataFormat): BaseImageNode(nodeS
         }
 
         try {
-            ImageIO.write(SwingFXUtils.fromFXImage(valueProperty.value!!, null), "png", file)
+            ImageIO.write(valueProperty.value, "png", file)
         } catch (exception: IOException) {
             exception.printStackTrace()
         }

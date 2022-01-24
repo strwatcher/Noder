@@ -2,6 +2,7 @@ package com.strwatcher.noder.nodes.filter_nodes
 
 import com.strwatcher.noder.base.FilterNode
 import com.strwatcher.noder.base.LinkInput
+import com.strwatcher.noder.base.RotationNodeType
 import javafx.embed.swing.SwingFXUtils
 import javafx.fxml.FXML
 import javafx.scene.image.Image
@@ -14,19 +15,20 @@ import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.sin
 
-class RotationNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeState, linkState){
+class RotationNode(nodeState: DataFormat, linkState: DataFormat, id: UInt): FilterNode(nodeState, linkState, id){
     private lateinit var angleInput: LinkInput<Float?>
 
     @FXML
     override fun initialize() {
         super.initialize()
 
-        angleInput = LinkInput(null)
+        angleInput = LinkInput(null, this)
 
         inputs = mapOf(
             Pair(angleInput, "Angle")
         )
 
+        initInputs()
         addInputs(3)
         bindInputs()
     }
@@ -51,5 +53,15 @@ class RotationNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nod
 
     override fun setTitle() {
         nodeTitle.text = "Rotate"
+    }
+
+    override fun initType(): String = RotationNodeType
+    override fun initInputs() {
+        linkInputs.addAll(
+            listOf(
+                imageInput,
+                angleInput
+            )
+        )
     }
 }

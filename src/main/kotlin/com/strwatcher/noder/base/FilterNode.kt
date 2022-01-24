@@ -1,27 +1,33 @@
 package com.strwatcher.noder.base
 
 import com.strwatcher.noder.utils.labelFont
+import javafx.embed.swing.SwingFXUtils
 import javafx.fxml.FXML
 import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.scene.input.DataFormat
 import javafx.scene.layout.RowConstraints
+import java.awt.image.BufferedImage
 
-abstract class FilterNode(nodeState: DataFormat, linkState: DataFormat): BaseImageNode(nodeState, linkState) {
-    lateinit var imageInput: LinkInput<Image>
-    lateinit var imageOutput: LinkOutput<Image>
+abstract class FilterNode(
+    nodeState: DataFormat,
+    linkState: DataFormat,
+    id: UInt
+): BaseImageNode(nodeState, linkState, id) {
+    lateinit var imageInput: LinkInput<BufferedImage>
+    lateinit var imageOutput: LinkOutput<BufferedImage>
     lateinit var inputs: Map<LinkInput<*>, String>
 
     @FXML
     override fun initialize() {
         super.initialize()
         setTitle()
-        imageInput = LinkInput(null)
+        imageInput = LinkInput(null, this)
         imageInput.valueProperty.addListener {
                 _, _, newValue ->
-            val filteredImage = filterImage(newValue)
-            valueProperty.value = filteredImage
-            link.valueProperty.value = filteredImage
+            val filteredImage = filterImage(SwingFXUtils.toFXImage(newValue, null))
+            valueProperty.value = SwingFXUtils.fromFXImage(filteredImage, null)
+            link.valueProperty.value = SwingFXUtils.fromFXImage(filteredImage, null)
             image.image = filteredImage
 
         }
@@ -38,9 +44,13 @@ abstract class FilterNode(nodeState: DataFormat, linkState: DataFormat): BaseIma
             input.key.onDragDropped = linkDragDroppedHandler
             input.key.valueProperty.addListener {
                     _, _, _ ->
-                val filteredImage = filterImage(imageInput.valueProperty.value)
-                valueProperty.value = filteredImage
-                link.valueProperty.value = filteredImage
+                val filteredImage = filterImage(
+                    SwingFXUtils.toFXImage(imageInput.valueProperty.value, null)
+                )
+                filteredImage.let {
+                    valueProperty.value = SwingFXUtils.fromFXImage(filteredImage, null)
+                    link.valueProperty.value = SwingFXUtils.fromFXImage(filteredImage, null)
+                }
                 image.image = filteredImage
             }
         }

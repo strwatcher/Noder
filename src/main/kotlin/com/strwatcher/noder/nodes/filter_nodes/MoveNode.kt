@@ -2,6 +2,7 @@ package com.strwatcher.noder.nodes.filter_nodes
 
 import com.strwatcher.noder.base.FilterNode
 import com.strwatcher.noder.base.LinkInput
+import com.strwatcher.noder.base.MoveNodeType
 import com.strwatcher.noder.imageToMat
 import com.strwatcher.noder.matToImage
 import javafx.fxml.FXML
@@ -11,7 +12,7 @@ import org.opencv.core.CvType
 import org.opencv.core.Mat
 import org.opencv.imgproc.Imgproc
 
-class MoveNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeState, linkState){
+class MoveNode(nodeState: DataFormat, linkState: DataFormat, id: UInt): FilterNode(nodeState, linkState, id){
     private lateinit var xInput: LinkInput<Float?>
     private lateinit var yInput: LinkInput<Float?>
 
@@ -19,14 +20,15 @@ class MoveNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeSta
     override fun initialize() {
         super.initialize()
 
-        xInput = LinkInput(null)
-        yInput = LinkInput(null)
+        xInput = LinkInput(null, this)
+        yInput = LinkInput(null, this)
 
         inputs = mapOf(
             Pair(xInput, "x"),
             Pair(yInput, "y")
         )
 
+        initInputs()
         addInputs(3)
         bindInputs()
     }
@@ -51,5 +53,16 @@ class MoveNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeSta
 
     override fun setTitle() {
         nodeTitle.text = "Move"
+    }
+
+    override fun initType(): String = MoveNodeType
+    override fun initInputs() {
+        linkInputs.addAll(
+            listOf(
+                imageInput,
+                xInput,
+                yInput
+            )
+        )
     }
 }

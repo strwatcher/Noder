@@ -13,8 +13,9 @@ import javafx.scene.paint.Paint
 abstract class EditNode<T>(
     nodeState: DataFormat,
     linkState: DataFormat,
+    id: UInt,
     private val validatorRegex: Regex
-    ): ValueNode<T>(nodeState, linkState, FXMLLoader(EditNode::class.java.getResource("EditNode.fxml"))
+    ): ValueNode<T>(nodeState, linkState, id, FXMLLoader(EditNode::class.java.getResource("EditNode.fxml"))
 ) {
     protected lateinit var valueOutput: LinkOutput<T>
 

@@ -13,7 +13,7 @@ import javafx.geometry.Point2D
 import javafx.scene.layout.AnchorPane
 import javafx.scene.shape.CubicCurve
 
-class NodeLink<T>(private val source: DraggableNode<T>) : AnchorPane() {
+class NodeLink<T>(val source: DraggableNode<T>) : AnchorPane() {
     @FXML
     lateinit var link: CubicCurve
 
@@ -73,6 +73,10 @@ class NodeLink<T>(private val source: DraggableNode<T>) : AnchorPane() {
         link.endXProperty().unbind()
         link.endYProperty().unbind()
         setEnd(Point2D(link.startX, link.startY))
+        destination?.connectedLink = null
+        destination?.parent?.connectedLinks?.remove(this)
+        destination?.valueProperty?.set(destination?.defaultValue)
+        destination = null
     }
 
     fun bindLayoutProperty(source: AnchorPane, propertyX: DoubleProperty, propertyY: DoubleProperty) {

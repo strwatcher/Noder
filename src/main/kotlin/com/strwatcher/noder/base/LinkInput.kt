@@ -5,7 +5,7 @@ import javafx.scene.layout.AnchorPane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 
-class LinkInput<T>(initialValue: T?): AnchorPane() {
+class LinkInput<T>(initialValue: T?, val parent: DraggableNode<*>): AnchorPane() {
     val valueProperty = SimpleObjectProperty(initialValue)
     var defaultValue: T? = initialValue
     var connectedLink: NodeLink<T>? = null

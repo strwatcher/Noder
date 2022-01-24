@@ -1,6 +1,7 @@
 package com.strwatcher.noder.nodes.filter_nodes
 
 import com.strwatcher.noder.base.FilterNode
+import com.strwatcher.noder.base.SepiaNodeType
 import com.strwatcher.noder.imageToMat
 import com.strwatcher.noder.matToImage
 import javafx.fxml.FXML
@@ -10,7 +11,7 @@ import org.opencv.core.Core
 import org.opencv.core.CvType
 import org.opencv.core.Mat
 
-class SepiaNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeState, linkState) {
+class SepiaNode(nodeState: DataFormat, linkState: DataFormat, id: UInt): FilterNode(nodeState, linkState, id) {
     private lateinit var mSepiaKernel: Mat
 
     @FXML
@@ -22,6 +23,7 @@ class SepiaNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeSt
         mSepiaKernel.put(2, 0, /* B */0.393, 0.769, 0.189, 0.0)
         mSepiaKernel.put(3, 0, /* A */0.000, 0.000, 0.000, 1.0)
         inputs = mapOf()
+        initInputs()
     }
 
     override fun filterFunction(img: Image): Image {
@@ -33,5 +35,14 @@ class SepiaNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeSt
 
     override fun setTitle() {
         nodeTitle.text = "Sepia"
+    }
+
+    override fun initType(): String = SepiaNodeType
+    override fun initInputs() {
+        linkInputs.addAll(
+            listOf(
+                imageInput,
+            )
+        )
     }
 }

@@ -1,6 +1,7 @@
 package com.strwatcher.noder.nodes.edit_nodes
 
 import com.strwatcher.noder.base.BaseImageNode
+import com.strwatcher.noder.base.ImageNodeType
 import com.strwatcher.noder.base.LinkOutput
 import javafx.embed.swing.SwingFXUtils
 import javafx.fxml.FXML
@@ -12,7 +13,11 @@ import javafx.stage.FileChooser
 import javafx.stage.Stage
 import javax.imageio.ImageIO
 
-open class ImageNode(nodeState: DataFormat, linkState: DataFormat): BaseImageNode(nodeState, linkState) {
+open class ImageNode(
+    nodeState: DataFormat,
+    linkState: DataFormat,
+    id: UInt
+): BaseImageNode(nodeState, linkState, id) {
     @FXML
     override fun initialize() {
         super.initialize()
@@ -25,14 +30,19 @@ open class ImageNode(nodeState: DataFormat, linkState: DataFormat): BaseImageNod
 
         openButton.setOnAction {
             val img = importImage()
-            valueProperty.set(img)
-            image.image = valueProperty.value
+            valueProperty.set(SwingFXUtils.fromFXImage(img, null))
+            image.image = img
         }
 
         val output = LinkOutput<Image>()
         output.onDragDetected = linkDragDetectedHandler
         grid.add(output, 2, 2)
 
+
+    }
+
+    override fun initType(): String = ImageNodeType
+    override fun initInputs() {
 
     }
 

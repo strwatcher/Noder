@@ -1,5 +1,6 @@
 package com.strwatcher.noder.nodes.filter_nodes
 
+import com.strwatcher.noder.base.BlurNodeType
 import com.strwatcher.noder.base.FilterNode
 import com.strwatcher.noder.base.LinkInput
 import com.strwatcher.noder.imageToMat
@@ -11,18 +12,23 @@ import org.opencv.core.Mat
 import org.opencv.core.Size
 import org.opencv.imgproc.Imgproc
 
-class BlurNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeState, linkState) {
+class BlurNode(
+    nodeState: DataFormat,
+    linkState: DataFormat,
+    id: UInt
+): FilterNode(nodeState, linkState, id) {
     private lateinit var kernelSizeInput: LinkInput<Int?>
 
     @FXML
     override fun initialize() {
         super.initialize()
-        kernelSizeInput = LinkInput(null)
+        kernelSizeInput = LinkInput(null, this)
 
         inputs = mapOf(
             Pair(kernelSizeInput, "Kernel size")
         )
 
+        initInputs()
         addInputs(3)
         bindInputs()
     }
@@ -40,6 +46,17 @@ class BlurNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeSta
 
     override fun setTitle() {
         nodeTitle.text = "Blur"
+    }
+
+    override fun initType(): String = BlurNodeType
+    override fun initInputs() {
+        linkInputs.addAll(
+            listOf(
+                imageInput,
+                kernelSizeInput
+            )
+        )
+
     }
 
 }

@@ -1,6 +1,7 @@
 package com.strwatcher.noder.nodes.filter_nodes
 
 import com.strwatcher.noder.base.FilterNode
+import com.strwatcher.noder.base.GrayFilterNodeType
 import com.strwatcher.noder.imageToMat
 import com.strwatcher.noder.matToImage
 import javafx.fxml.FXML
@@ -9,12 +10,13 @@ import javafx.scene.input.DataFormat
 import org.opencv.core.Mat
 import org.opencv.imgproc.Imgproc
 
-class GrayFilterNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeState, linkState) {
+class GrayFilterNode(nodeState: DataFormat, linkState: DataFormat, id: UInt): FilterNode(nodeState, linkState, id) {
 
     @FXML
     override fun initialize() {
         super.initialize()
         inputs = mapOf()
+        initInputs()
     }
 
     override fun filterFunction(img: Image): Image {
@@ -26,5 +28,14 @@ class GrayFilterNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(n
 
     override fun setTitle() {
         nodeTitle.text = "Gray Filter"
+    }
+
+    override fun initType(): String = GrayFilterNodeType
+    override fun initInputs() {
+        linkInputs.addAll(
+            listOf(
+                imageInput,
+            )
+        )
     }
 }

@@ -1,17 +1,23 @@
 package com.strwatcher.noder.base
 
 import javafx.event.EventHandler
+import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.geometry.Point2D
 import javafx.scene.input.*
 import javafx.scene.layout.AnchorPane
+import java.io.Serializable
 
 
 abstract class DraggableNode<T>(
     private val nodeState: DataFormat,
     private val linkState: DataFormat,
+    val id: UInt,
     loader: FXMLLoader
-): AnchorPane() {
+): AnchorPane(), Serializable {
+
+    var type: String private set
+
 
     private val dragOverHandler = EventHandler<DragEvent> {
             event ->
@@ -124,7 +130,8 @@ abstract class DraggableNode<T>(
     private var superParent: AnchorPane? = null
     var link = NodeLink(this)
     var value: T? = null
-    protected val connectedLinks = mutableListOf<NodeLink<T>>()
+    val connectedLinks = mutableListOf<NodeLink<*>>()
+    var linkInputs = mutableListOf<LinkInput<*>>()
 
     private fun moveTo(point: Point2D) {
         val local = parent.sceneToLocal(point)
@@ -135,15 +142,23 @@ abstract class DraggableNode<T>(
         )
     }
 
-    fun removeLink(link: NodeLink<T>) {
+    fun removeLink(link: NodeLink<*>) {
         superParent!!.children.remove(link)
         link.isConnected = false
         link.unbindEnd()
-        link.destination?.connectedLink = null
-        link.destination?.valueProperty?.set(link.destination?.defaultValue)
-        link.destination = null
-
     }
+
+    var onNodeRemovedCallback: (DraggableNode<T>) -> Unit = {}
+
+    open fun load(_x: Double, _y: Double, _value: T?) {
+        layoutX = _x
+        layoutY = _y
+        value = _value
+    }
+
+    abstract fun initType(): String
+
+    abstract fun initInputs()
 
     init {
         loader.setController(this)
@@ -157,6 +172,8 @@ abstract class DraggableNode<T>(
         link.setOnMouseClicked {
             removeLink(link)
         }
+
+        type = initType()
     }
 
 }

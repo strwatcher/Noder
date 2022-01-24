@@ -1,5 +1,6 @@
 package com.strwatcher.noder.nodes.filter_nodes
 
+import com.strwatcher.noder.base.AddImageNodeType
 import com.strwatcher.noder.base.FilterNode
 import com.strwatcher.noder.base.LinkInput
 import javafx.embed.swing.SwingFXUtils
@@ -8,19 +9,24 @@ import javafx.scene.image.Image
 import javafx.scene.input.DataFormat
 import java.awt.Color
 import java.awt.Font
+import java.awt.image.BufferedImage
 
-class AddImageNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeState, linkState) {
+class AddImageNode(
+    nodeState: DataFormat,
+    linkState: DataFormat,
+    id: UInt
+): FilterNode(nodeState, linkState, id) {
     private lateinit var xInput: LinkInput<Int?>
     private lateinit var yInput: LinkInput<Int?>
-    private lateinit var addingImageInput: LinkInput<Image?>
+    private lateinit var addingImageInput: LinkInput<BufferedImage?>
 
     @FXML
     override fun initialize() {
         super.initialize()
 
-        xInput = LinkInput(null)
-        yInput = LinkInput(null)
-        addingImageInput = LinkInput(null)
+        xInput = LinkInput(null, this)
+        yInput = LinkInput(null, this)
+        addingImageInput = LinkInput(null, this)
 
         inputs = mapOf(
             Pair(addingImageInput, "Image"),
@@ -28,6 +34,7 @@ class AddImageNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nod
             Pair(yInput, "y")
         )
 
+        initInputs()
         addInputs(3)
         bindInputs()
     }
@@ -39,7 +46,7 @@ class AddImageNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nod
         graphics.font = font
         graphics.color = Color.BLACK
         graphics.drawImage(
-            SwingFXUtils.fromFXImage(addingImageInput.valueProperty.value!!, null),
+            addingImageInput.valueProperty.value!!,
             xInput.valueProperty.value!!,
             yInput.valueProperty.value!!,
             null
@@ -50,5 +57,16 @@ class AddImageNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nod
 
     override fun setTitle() {
         nodeTitle.text = "Add Image"
+    }
+
+    override fun initType(): String = AddImageNodeType
+
+    override fun initInputs() {
+       linkInputs.addAll(listOf(
+           imageInput,
+           xInput,
+           yInput,
+           addingImageInput
+       ))
     }
 }

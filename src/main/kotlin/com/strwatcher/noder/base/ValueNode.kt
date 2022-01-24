@@ -8,9 +8,10 @@ import javafx.scene.input.DataFormat
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.VBox
 
-abstract class ValueNode<T>(nodeState: DataFormat, linkState: DataFormat, loader: FXMLLoader): DraggableNode<T>(
+abstract class ValueNode<T>(nodeState: DataFormat, linkState: DataFormat, id: UInt, loader: FXMLLoader): DraggableNode<T>(
     nodeState,
     linkState,
+    id,
     loader
 ) {
     @FXML
@@ -28,19 +29,23 @@ abstract class ValueNode<T>(nodeState: DataFormat, linkState: DataFormat, loader
     @FXML
     lateinit var deleteButton: Button
 
+    private fun removeAllLinks() {
+        val allLinks = connectedLinks.plus(link)
+        val linksIterator = allLinks.iterator()
+
+        for(link in linksIterator) {
+            removeLink(link)
+        }
+    }
+
     @FXML
     open fun initialize() {
         draggedArea.onDragDetected = dragDetectedHandler
 
         deleteButton.setOnAction {
-
             (parent as AnchorPane).children.remove(this)
-            for(link: NodeLink<T> in connectedLinks) {
-                removeLink(link)
-            }
-
-            removeLink(link)
+            removeAllLinks()
+            onNodeRemovedCallback(this)
         }
     }
-
 }

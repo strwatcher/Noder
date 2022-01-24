@@ -1,5 +1,6 @@
 package com.strwatcher.noder.nodes.filter_nodes
 
+import com.strwatcher.noder.base.AddTextNodeType
 import com.strwatcher.noder.base.FilterNode
 import com.strwatcher.noder.base.LinkInput
 import com.strwatcher.noder.utils.labelFont
@@ -12,7 +13,11 @@ import javafx.scene.layout.RowConstraints
 import java.awt.Color
 import java.awt.Font
 
-class AddTextNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(nodeState, linkState) {
+class AddTextNode(
+    nodeState: DataFormat,
+    linkState: DataFormat,
+    id: UInt
+): FilterNode(nodeState, linkState, id) {
     private lateinit var xInput: LinkInput<Int?>
     private lateinit var yInput: LinkInput<Int?>
     private lateinit var textInput: LinkInput<String?>
@@ -20,9 +25,9 @@ class AddTextNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(node
     @FXML
     override fun initialize() {
         super.initialize()
-        xInput = LinkInput(null)
-        yInput = LinkInput(null)
-        textInput = LinkInput(null)
+        xInput = LinkInput(null, this)
+        yInput = LinkInput(null, this)
+        textInput = LinkInput(null, this)
 
         inputs = mapOf(
             Pair(xInput, "x"),
@@ -30,6 +35,7 @@ class AddTextNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(node
             Pair(textInput, "Text")
         )
 
+        initInputs()
         addInputs(3)
         bindInputs()
     }
@@ -51,6 +57,18 @@ class AddTextNode(nodeState: DataFormat, linkState: DataFormat): FilterNode(node
 
     override fun setTitle() {
         nodeTitle.text = "Add Text"
+    }
+
+    override fun initType(): String = AddTextNodeType
+    override fun initInputs() {
+       linkInputs.addAll(
+           listOf(
+               imageInput,
+               xInput,
+               yInput,
+               textInput
+           )
+       )
     }
 
 }

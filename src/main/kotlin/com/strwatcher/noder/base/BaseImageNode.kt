@@ -8,9 +8,10 @@ import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.DataFormat
 import javafx.scene.layout.GridPane
+import java.awt.image.BufferedImage
 
-abstract class BaseImageNode(nodeState: DataFormat, linkState: DataFormat):
-    ValueNode<Image>(nodeState, linkState, FXMLLoader(BaseImageNode::class.java.getResource("ImageNode.fxml")))
+abstract class BaseImageNode(nodeState: DataFormat, linkState: DataFormat, id: UInt):
+    ValueNode<BufferedImage>(nodeState, linkState, id, FXMLLoader(BaseImageNode::class.java.getResource("ImageNode.fxml")))
 {
     @FXML
     lateinit var image: ImageView
@@ -18,7 +19,7 @@ abstract class BaseImageNode(nodeState: DataFormat, linkState: DataFormat):
     @FXML
     lateinit var grid: GridPane
 
-    lateinit var valueProperty: SimpleObjectProperty<Image?>
+    lateinit var valueProperty: SimpleObjectProperty<BufferedImage?>
 
     @FXML
     override fun initialize() {
@@ -34,6 +35,7 @@ abstract class BaseImageNode(nodeState: DataFormat, linkState: DataFormat):
 
         valueProperty.addListener { _, _, newValue ->
             link.valueProperty.set(newValue)
+            value = newValue
         }
     }
 }
