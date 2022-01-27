@@ -53,6 +53,10 @@ class EndNode(nodeState: DataFormat, linkState: DataFormat, id: UInt): BaseImage
 
     }
 
+    override fun initOutput() {
+
+    }
+
     override fun initType(): String = EndNodeType
     override fun initInputs() {
        linkInputs.add(input)

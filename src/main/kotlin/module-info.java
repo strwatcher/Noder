@@ -22,4 +22,5 @@ module com.strwatcher.noder {
     exports com.strwatcher.noder.nodes;
     opens com.strwatcher.noder.nodes.edit_nodes to javafx.fxml, com.google.gson;
     opens com.strwatcher.noder.nodes.filter_nodes to javafx.fxml, com.google.gson;
+    opens com.strwatcher.noder.serialization to com.google.gson;
 }

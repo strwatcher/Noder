@@ -106,6 +106,11 @@ abstract class DraggableNode<T>(
             && linkSource != this
         ) {
            connectLink(connectedLink, linkDestination)
+
+            val content = ClipboardContent()
+
+            content[linkState] = "link"
+            startDragAndDrop(*TransferMode.ANY).setContent(content)
         } else {
             parent.onDragDropped = null
             parent.onDragOver = null
@@ -124,6 +129,7 @@ abstract class DraggableNode<T>(
     val connectedLinks = mutableListOf<NodeLink<*>>()
     var linkInputs = mutableListOf<LinkInput<*>>()
     var valueProperty = SimpleObjectProperty<T?>()
+    var output: LinkOutput<T>? = null
 
     private fun moveTo(point: Point2D) {
         val local = parent.sceneToLocal(point)
@@ -144,17 +150,23 @@ abstract class DraggableNode<T>(
         connectedLink: NodeLink<E>,
         linkDestination: LinkInput<E>,
     ) {
-            connectedLink.bindEnd(linkDestination)
-            connectedLink.isConnected = true
-            connectedLink.destination = linkDestination
-            linkDestination.valueProperty.set(connectedLink.valueProperty.value)
-            linkDestination.connectedLink = connectedLink
-            connectedLinks.add(connectedLink)
+        connectedLink.link.isVisible = true
+        connectedLink.bindEnd(linkDestination)
+        connectedLink.isConnected = true
+        connectedLink.destination = linkDestination
+        linkDestination.valueProperty.set(connectedLink.valueProperty.value)
+        linkDestination.connectedLink = connectedLink
+        connectedLinks.add(connectedLink)
 
-            val content = ClipboardContent()
+    }
 
-            content[linkState] = "link"
-            startDragAndDrop(*TransferMode.ANY).setContent(content)
+    fun <E> loadLink(
+        connectedLink: NodeLink<E>,
+        linkDestination: LinkInput<E>
+    ) {
+        connectLink(connectedLink, linkDestination)
+        superParent!!.children.add(0, connectedLink)
+        connectedLink.source.output?.let { connectedLink.bindStart(it) }
     }
 
     var onNodeRemovedCallback: (DraggableNode<T>) -> Unit = {}
@@ -166,6 +178,8 @@ abstract class DraggableNode<T>(
 
         valueProperty.set(_value)
     }
+
+    abstract fun initOutput()
 
     abstract fun initType(): String
 

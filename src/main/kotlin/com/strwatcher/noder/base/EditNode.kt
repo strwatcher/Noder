@@ -29,6 +29,7 @@ abstract class EditNode<T>(
         valueOutput = LinkOutput()
         valueOutput.onDragDetected = linkDragDetectedHandler
         outputLayout.children.add(valueOutput)
+        initOutput()
 
         draggedArea.onDragDetected = dragDetectedHandler
         editField.textProperty().addListener {
@@ -62,6 +63,10 @@ abstract class EditNode<T>(
     override fun load(_x: Double, _y: Double, _value: T?) {
         super.load(_x, _y, _value)
         editField.textProperty().set(_value.toString())
+    }
+
+    override fun initOutput() {
+        output = valueOutput
     }
 
     abstract fun toValue(text: String): T

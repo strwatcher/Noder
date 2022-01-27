@@ -6,6 +6,7 @@ import javafx.scene.input.DataFormat
 
 class Scene(val nodeState: DataFormat, val linkState: DataFormat, private var currentId: UInt) {
     val nodes: MutableList<DraggableNode<*>> = mutableListOf()
+    val connections: MutableList<InputLinksState> = mutableListOf()
 
     fun add(node: DraggableNode<*>) {
         nodes.add(node)

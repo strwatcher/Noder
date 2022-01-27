@@ -15,8 +15,8 @@ class DraggableNodeSerializer: JsonSerializer<DraggableNodeState> {
         if (src == null) return result
 
         val position = src.position
-        result.addProperty("x", position.x)
-        result.addProperty("y", position.y)
+        result.addProperty("x", position.minX)
+        result.addProperty("y", position.minY)
         result.addProperty("id", src.id.toString())
         result.addProperty("type", src.type)
 

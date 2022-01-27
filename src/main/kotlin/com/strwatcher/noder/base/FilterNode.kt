@@ -25,17 +25,21 @@ abstract class FilterNode(
         imageInput = LinkInput(null, this)
         imageInput.valueProperty.addListener {
                 _, _, newValue ->
-            val filteredImage = filterImage(SwingFXUtils.toFXImage(newValue, null))
-            valueProperty.value = SwingFXUtils.fromFXImage(filteredImage, null)
-            link.valueProperty.value = SwingFXUtils.fromFXImage(filteredImage, null)
-            image.image = filteredImage
-
+            newValue?.let {
+                val filteredImage = filterImage(SwingFXUtils.toFXImage(newValue, null))
+                filteredImage?.let {
+                    valueProperty.value = SwingFXUtils.fromFXImage(filteredImage, null)
+                    link.valueProperty.value = SwingFXUtils.fromFXImage(filteredImage, null)
+                    image.image = filteredImage
+                }
+            }
         }
         imageInput.onDragDropped = linkDragDroppedHandler
         grid.add(imageInput, 0, 2)
 
         imageOutput = LinkOutput()
         imageOutput.onDragDetected = linkDragDetectedHandler
+        initOutput()
         grid.add(imageOutput, 2, 2)
     }
 
@@ -71,6 +75,10 @@ abstract class FilterNode(
         }
         if (img == null) return null
         return filterFunction(img)
+    }
+
+    override fun initOutput() {
+        output = imageOutput
     }
 
     abstract fun filterFunction(img: Image): Image

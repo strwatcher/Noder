@@ -1,6 +1,8 @@
 package com.strwatcher.noder
 
 import com.strwatcher.noder.base.DraggableNode
+import com.strwatcher.noder.base.LinkInput
+import com.strwatcher.noder.base.NodeLink
 import com.strwatcher.noder.base.Scene
 import com.strwatcher.noder.nodes.EndNode
 import com.strwatcher.noder.nodes.StartNode
@@ -19,6 +21,7 @@ import javafx.scene.layout.VBox
 import javafx.stage.FileChooser
 import javafx.stage.Stage
 import nu.pattern.OpenCV
+import java.awt.image.BufferedImage
 import java.io.File
 
 class MainViewController {
@@ -196,6 +199,8 @@ class MainViewController {
            for(node in nodesIterator) {
                sceneContainer.children.add(node)
            }
+
+           loadLinks()
        }
 
     }
@@ -211,5 +216,36 @@ class MainViewController {
 
     private fun clearScene() {
         sceneContainer.children.clear()
+    }
+
+    private fun loadLinks() {
+        for (nodeConnections in scene.connections) {
+            val node = scene.findNodeById(nodeConnections.id.toUInt())
+            node?.let {
+                for (connectionKey in nodeConnections.connections) {
+                    val connectedNode = scene.findNodeById(connectionKey.nodeId.toUInt())
+                    connectedNode.let {
+                        val connectedLink = connectedNode!!.link
+                        val currentInput = node.linkInputs[connectionKey.inputId]
+                        when {
+                            connectedLink.valueProperty.value is Int? && currentInput.valueProperty.value is Int? ->
+                                node.loadLink(connectedLink as NodeLink<Int?>, currentInput as LinkInput<Int?>)
+
+                            connectedLink.valueProperty.value is Float? && currentInput.valueProperty.value is Float? ->
+                                node.loadLink(connectedLink as NodeLink<Float?>, currentInput as LinkInput<Float?>)
+
+                            connectedLink.valueProperty.value is String? && currentInput.valueProperty.value is String? ->
+                                node.loadLink(connectedLink as NodeLink<String?>, currentInput as LinkInput<String?>)
+
+                            connectedLink.valueProperty.value is BufferedImage? && currentInput.valueProperty.value is BufferedImage? ->
+                                node.loadLink(
+                                    connectedLink as NodeLink<BufferedImage?>,
+                                    currentInput as LinkInput<BufferedImage?>
+                                )
+                        }
+                    }
+                }
+            }
+        }
     }
 }

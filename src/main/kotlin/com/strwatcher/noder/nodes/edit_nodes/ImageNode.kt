@@ -11,6 +11,7 @@ import javafx.scene.input.DataFormat
 import javafx.scene.layout.RowConstraints
 import javafx.stage.FileChooser
 import javafx.stage.Stage
+import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 
 open class ImageNode(
@@ -18,6 +19,8 @@ open class ImageNode(
     linkState: DataFormat,
     id: UInt
 ): BaseImageNode(nodeState, linkState, id) {
+    lateinit var imageOutput: LinkOutput<BufferedImage>
+
     @FXML
     override fun initialize() {
         super.initialize()
@@ -34,9 +37,10 @@ open class ImageNode(
             image.image = img
         }
 
-        val output = LinkOutput<Image>()
-        output.onDragDetected = linkDragDetectedHandler
-        grid.add(output, 2, 2)
+        imageOutput = LinkOutput()
+        imageOutput.onDragDetected = linkDragDetectedHandler
+        initOutput()
+        grid.add(imageOutput, 2, 2)
 
         valueProperty.addListener {
             _, _, newValue ->
@@ -49,6 +53,10 @@ open class ImageNode(
     override fun initType(): String = ImageNodeType
     override fun initInputs() {
 
+    }
+
+    override fun initOutput() {
+       output = imageOutput
     }
 
     private fun importImage(): Image {

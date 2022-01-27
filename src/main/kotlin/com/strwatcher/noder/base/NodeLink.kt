@@ -61,7 +61,7 @@ class NodeLink<T>(val source: DraggableNode<T>) : AnchorPane() {
         link.endY = point.y
     }
 
-    fun <T> bindStart(source: LinkOutput<T>) {
+    fun bindStart(source: LinkOutput<*>) {
         bindLayoutProperty(source, link.startXProperty(), link.startYProperty())
     }
 
