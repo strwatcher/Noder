@@ -1,14 +1,11 @@
 package com.strwatcher.noder.base
 
 import com.google.gson.GsonBuilder
-import com.strwatcher.noder.serialization.DraggableNodeSerializer
-import com.strwatcher.noder.serialization.DraggableNodeState
-import com.strwatcher.noder.serialization.SceneSerializer
+import com.strwatcher.noder.serialization.*
+import javafx.scene.input.DataFormat
 
-class Scene {
+class Scene(val nodeState: DataFormat, val linkState: DataFormat, private var currentId: UInt) {
     val nodes: MutableList<DraggableNode<*>> = mutableListOf()
-    private var currentId: UInt = 0u
-
 
     fun add(node: DraggableNode<*>) {
         nodes.add(node)
@@ -18,11 +15,20 @@ class Scene {
         nodes.remove(node)
     }
 
+    fun findNodeById(id: UInt): DraggableNode<*>? {
+        for(node in nodes) {
+            if (node.id == id) {
+                return node
+            }
+        }
+        return null
+    }
+
     fun getId(): UInt {
         return currentId.also { currentId += 1u }
     }
 
-    fun save() {
+    fun save(): String {
         val gson = GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(Scene::class.java, SceneSerializer())
@@ -30,5 +36,16 @@ class Scene {
             .create()
 
         println(gson.toJson(this))
+        return gson.toJson(this)
+    }
+
+    fun load(json: String): Scene {
+        val gson = GsonBuilder()
+            .registerTypeAdapter(Scene::class.java, SceneDeserializer(nodeState, linkState))
+            .registerTypeAdapter(DraggableNode::class.java, DraggableNodeDeserializer(nodeState, linkState))
+            .create()
+
+        return gson.fromJson(json, Scene::class.java)
+
     }
 }

@@ -19,7 +19,6 @@ abstract class BaseImageNode(nodeState: DataFormat, linkState: DataFormat, id: U
     @FXML
     lateinit var grid: GridPane
 
-    lateinit var valueProperty: SimpleObjectProperty<BufferedImage?>
 
     @FXML
     override fun initialize() {

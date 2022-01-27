@@ -9,9 +9,13 @@ import com.strwatcher.noder.nodes.edit_nodes.ImageNode
 import com.strwatcher.noder.nodes.edit_nodes.IntNode
 import com.strwatcher.noder.nodes.edit_nodes.StringNode
 import com.strwatcher.noder.nodes.filter_nodes.*
+import com.strwatcher.noder.utils.toByteArray
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.input.DataFormat
+import java.awt.image.BufferedImage
+import java.io.ByteArrayInputStream
 import java.lang.reflect.Type
+import java.nio.Buffer
 import javax.imageio.ImageIO
 
 class DraggableNodeDeserializer(
@@ -41,14 +45,21 @@ class DraggableNodeDeserializer(
                     StringNode(nodeState, linkState, id).also {it.load(x, y, value)}
                 }
                 ImageNodeType ->  {
-                    val bufImage = ImageIO.read(jo.get("value").asString.byteInputStream())
+                    val value = jo.get("value")
+                    val bufImage: BufferedImage? = if (value == null) null
+                    else ImageIO.read(ByteArrayInputStream(jo.getAsJsonArray("value").toByteArray()))
+
                     ImageNode(nodeState, linkState, id).also { it.load(x, y, bufImage) }
                 }
                 EndNodeType -> {
                    EndNode(nodeState, linkState, id).also { it.load(x, y, null) }
                 }
                 StartNodeType -> {
-                    StartNode(nodeState, linkState, id).also { it.load(x, y, null) }
+                    val value = jo.get("value")
+                    val bufImage: BufferedImage? = if (value == null) null
+                    else ImageIO.read(ByteArrayInputStream(jo.getAsJsonArray("value").toByteArray()))
+
+                    StartNode(nodeState, linkState, id).also { it.load(x, y, bufImage) }
                 }
                 AddImageNodeType -> {
                     AddImageNode(nodeState, linkState, id).also { it.load(x, y, null) }

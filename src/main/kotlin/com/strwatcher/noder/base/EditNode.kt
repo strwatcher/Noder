@@ -1,5 +1,6 @@
 package com.strwatcher.noder.base
 
+import javafx.beans.property.SimpleObjectProperty
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.control.TextField
@@ -20,7 +21,7 @@ abstract class EditNode<T>(
     protected lateinit var valueOutput: LinkOutput<T>
 
     @FXML
-    protected lateinit var editField: TextField
+    lateinit var editField: TextField
 
     @FXML
     override fun initialize() {
@@ -56,6 +57,11 @@ abstract class EditNode<T>(
                 )
             }
         }
+    }
+
+    override fun load(_x: Double, _y: Double, _value: T?) {
+        super.load(_x, _y, _value)
+        editField.textProperty().set(_value.toString())
     }
 
     abstract fun toValue(text: String): T

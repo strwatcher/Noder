@@ -38,7 +38,12 @@ open class ImageNode(
         output.onDragDetected = linkDragDetectedHandler
         grid.add(output, 2, 2)
 
-
+        valueProperty.addListener {
+            _, _, newValue ->
+            newValue.let {
+                image.image = SwingFXUtils.toFXImage(newValue, null)
+            }
+        }
     }
 
     override fun initType(): String = ImageNodeType

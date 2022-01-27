@@ -29,6 +29,7 @@ class SceneSerializer: JsonSerializer<Scene> {
             }
         }
 
+        result.addProperty("currentId", src.getId().toInt())
         result.add("connections", context.serialize(connections))
         result.add("nodes", nodes)
 

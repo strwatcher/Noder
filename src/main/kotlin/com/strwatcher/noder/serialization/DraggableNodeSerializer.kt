@@ -28,8 +28,8 @@ class DraggableNodeSerializer: JsonSerializer<DraggableNodeState> {
                 ImageIO.write(src.value, "png", baos)
                 writableImage = baos.toByteArray()
             }
-//            result.add("value", context!!.serialize(writableImage))
-            result.addProperty("value", "imageZagluha")
+            result.add("value", context!!.serialize(writableImage))
+//            result.addProperty("value", "imageZagluha")
         }
         if (src.value is Int || src.value is String || src.value is Float) {
             result.addProperty("value", src.value.toString())

@@ -1,5 +1,6 @@
 package com.strwatcher.noder.base
 
+import javafx.beans.property.SimpleObjectProperty
 import javafx.event.EventHandler
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
@@ -104,17 +105,7 @@ abstract class DraggableNode<T>(
             && !linkDestination.isConnected
             && linkSource != this
         ) {
-            connectedLink.bindEnd(linkDestination)
-            connectedLink.isConnected = true
-            connectedLink.destination = linkDestination
-            linkDestination.valueProperty.set(connectedLink.valueProperty.value)
-            linkDestination.connectedLink = connectedLink
-            connectedLinks.add(connectedLink)
-
-            val content = ClipboardContent()
-
-            content[linkState] = "link"
-            startDragAndDrop(*TransferMode.ANY).setContent(content)
+           connectLink(connectedLink, linkDestination)
         } else {
             parent.onDragDropped = null
             parent.onDragOver = null
@@ -132,6 +123,7 @@ abstract class DraggableNode<T>(
     var value: T? = null
     val connectedLinks = mutableListOf<NodeLink<*>>()
     var linkInputs = mutableListOf<LinkInput<*>>()
+    var valueProperty = SimpleObjectProperty<T?>()
 
     private fun moveTo(point: Point2D) {
         val local = parent.sceneToLocal(point)
@@ -148,12 +140,31 @@ abstract class DraggableNode<T>(
         link.unbindEnd()
     }
 
+    fun <E> connectLink(
+        connectedLink: NodeLink<E>,
+        linkDestination: LinkInput<E>,
+    ) {
+            connectedLink.bindEnd(linkDestination)
+            connectedLink.isConnected = true
+            connectedLink.destination = linkDestination
+            linkDestination.valueProperty.set(connectedLink.valueProperty.value)
+            linkDestination.connectedLink = connectedLink
+            connectedLinks.add(connectedLink)
+
+            val content = ClipboardContent()
+
+            content[linkState] = "link"
+            startDragAndDrop(*TransferMode.ANY).setContent(content)
+    }
+
     var onNodeRemovedCallback: (DraggableNode<T>) -> Unit = {}
 
     open fun load(_x: Double, _y: Double, _value: T?) {
         layoutX = _x
         layoutY = _y
         value = _value
+
+        valueProperty.set(_value)
     }
 
     abstract fun initType(): String

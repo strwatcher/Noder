@@ -16,12 +16,15 @@ import javafx.scene.control.ScrollPane
 import javafx.scene.input.DataFormat
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.VBox
+import javafx.stage.FileChooser
+import javafx.stage.Stage
 import nu.pattern.OpenCV
+import java.io.File
 
 class MainViewController {
     private val nodeState = DataFormat("nodeState")
     private val linkState = DataFormat("linkState")
-    private val scene = Scene()
+    private var scene = Scene(nodeState, linkState, 0u)
 
     @FXML
     private lateinit var sceneContainer: AnchorPane
@@ -163,11 +166,36 @@ class MainViewController {
         addNode(EndNode(nodeState, linkState, scene.getId()).also { it.layoutX = 700.0 })
 
        saveMenuItem.setOnAction {
-           scene.save()
+           val json = scene.save()
+           val fileChooser = FileChooser()
+           val extensionFilter = FileChooser.ExtensionFilter("JSON files (*.json)", "*.json")
+
+           fileChooser.extensionFilters.add(extensionFilter)
+
+           var file = fileChooser.showSaveDialog(sceneContainer.scene.window as Stage)
+
+           if (file.nameWithoutExtension == file.name) {
+               file = File(file.parentFile, file.nameWithoutExtension + ".json")
+           }
+
+           file.writeText(json)
        }
 
        openMenuItem.setOnAction {
-//           loadScene()
+           val fileChooser = FileChooser()
+           val extensionFilter = FileChooser.ExtensionFilter("JSON files (*.json)", "*.json")
+
+           fileChooser.extensionFilters.add(extensionFilter)
+
+           val file = fileChooser.showOpenDialog(sceneContainer.scene.window as Stage)
+           val json = file.readText()
+           scene = scene.load(json)
+           clearScene()
+
+           val nodesIterator = scene.nodes.iterator()
+           for(node in nodesIterator) {
+               sceneContainer.children.add(node)
+           }
        }
 
     }
@@ -180,4 +208,8 @@ class MainViewController {
         scene.add(node)
     }
 
+
+    private fun clearScene() {
+        sceneContainer.children.clear()
     }
+}
